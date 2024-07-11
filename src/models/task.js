@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const date = new Date();
 const TaskSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -6,18 +7,36 @@ const TaskSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
+        required: false
     },
     status: {
         type: String,
-        enum : ['pending', 'ongoing', 'completed'],
+        enum : ['not started' , 'in-progres' , 'completed'],
         required: true
     },
+    dueDate : {
+        type: Date,
+        required: true
+    },
+
     created_at: {
         type: Date,
         required : true,
-        default: Date.now
+        default: date
+    },
+
+    updated_at: {
+        type: Date,
+        required : true,
+        default: date
     }
 });
+
+// middleware to update the updated_at field before saving
+TaskSchema.pre('save', function(next) {
+    this.updated_at = date;
+    next();
+});
+
 
 module.exports = mongoose.model('Task', TaskSchema);

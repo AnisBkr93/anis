@@ -9,9 +9,8 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    status: {
+    status : {
         type: String,
-        enum : ['not started' , 'in-progres' , 'completed'],
         required: true
     },
     dueDate : {
@@ -37,6 +36,7 @@ TaskSchema.pre('save', function(next) {
     this.updated_at = date;
     next();
 });
+
 
 
 module.exports = mongoose.model('Task', TaskSchema);

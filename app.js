@@ -4,13 +4,14 @@ const mongoose = require('mongoose');
 const userRoutes = require('./src/routes/userRoutes');
 const taskRoutes = require('./src/routes/taskRoutes');
 const date = new Date();
+const cors = require('cors');
 
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 app.use(bodyParser.json());
 
-
-require('dotenv').config();
 require('./src/utils/database');
 app.use('/users', userRoutes);
 app.use('/tasks', taskRoutes);
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
 }); 
+
 
 
 

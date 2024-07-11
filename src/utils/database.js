@@ -1,29 +1,43 @@
 const mongoose = require('mongoose');
-const date = new Date();
+const { MongoClient } = require('mongodb');
 
-const { MongoClient , ServerApiVersion} = require('mongodb');
-const uri = "mongodb+srv://anis123:anis123@cluster0.mef0pya.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-const client = new MongoClient(uri , { 
-    serverApi: 
-    {
-        version: ServerApiVersion.v1,
-        strict: true ,
-        deprecationErrors : true
-    }
-     });
 
-async function run () {
+
+async function main() {
+
+    const uri = "mongodb+srv://anis123:anis123@cluster0.mef0pya.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+    const client = new MongoClient(uri);
+
     try {
-        await client.connect();
-        console.log('Connected to the database');
-    } finally {
+    await client.connect();
+    console.log('Database is connected successfully!');
+    await createListing(client, {
+        name: "ANIS",
+        email: "anis.boukerdoune@gmail.com",
+        password: "123456",
+    });
+    await listDatabase(client);
+
+    }catch(e){
+        console.error(e);
+    }
+    finally {
         await client.close();
     }
-
 }
-run().catch(console.dir);
+main().catch(console.error);
+
+async function listDatabase(client){
+    const databasesList = await client.db().admin().listDatabases();
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
 
 
+async function createListing(client, newListing){
+    const result = await client.db("DB").collection("users").insertOne(newListing);
+    console.log(`New listing created with the following id: ${result.insertedId}`);
+}
 
-
-
+module.exports = { createListing};

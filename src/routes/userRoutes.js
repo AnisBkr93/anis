@@ -17,7 +17,11 @@ router.post('/register', async (req, res) => {
     const { name , email , password } = req.body;
     try {
         const user = new User(req.body);
-        await user.save();
+        try {
+            await user.save();
+        } catch (error) {
+            res.status(400).send({error : 'We cannot save the user to the database'});
+        }
         res.status(201).send({user , message : 'User created successfully'});
     } catch (error) {
         res.status(400).send(error);
@@ -43,6 +47,8 @@ router.post('/login', async (req, res) => {
     }
 } 
 );
+
+
 
 
 module.exports = router;

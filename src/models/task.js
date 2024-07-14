@@ -7,26 +7,26 @@ const TaskSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: false
+        required: true
     },
     status : {
         type: String,
-        required: true
+        required: false
     },
     dueDate : {
         type: Date,
-        required: true
+        required: false
     },
 
     created_at: {
         type: Date,
-        required : true,
+        required : false,
         default: date
     },
 
     updated_at: {
         type: Date,
-        required : true,
+        required : false,
         default: date
     }
 });

@@ -1,35 +1,39 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const userRoutes = require('./src/routes/userRoutes');
-const taskRoutes = require('./src/routes/taskRoutes');
-const date = new Date();
-const cors = require('cors');
-
-
+const User = require('./src/models/user');
 const app = express();
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const dbSetup = require('./src/utils/database');
+const cors = require('cors');
+const router = express.Router();
+dotenv.config();
+
+//
+
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/users', require('./src/routes/userRoutes'));
+app.use('/tasks', require('./src/routes/taskRoutes'));
 
-require('./src/utils/database');
-app.use('/users', userRoutes);
-app.use('/tasks', taskRoutes);
-
-
-const PORT = process.env.PORT || 3000;
-
-app.use(bodyParser.json());
+PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 app.get('/', (req, res) => {
-    res.send('Task Manager API is working !'); 
-}
-);
- 
-app.listen(PORT, () => {
-    console.log(`Server is running on PORT ${PORT}`);
-}); 
+    res.send('Welcome to the Task Manager API');
+});
 
 
+    
+
+
+
+
+
+module.exports = app;
 
 

@@ -14,14 +14,11 @@ router.get('/' ,  (req, res) => {
 //register user
  
 router.post('/register', async (req, res) => {
-    const { name , email , password } = req.body;
+    const { username , email , password } = req.body;
     try {
         const user = new User(req.body);
-        try {
-            await user.save();
-        } catch (error) {
-            res.status(400).send({error : 'We cannot save the user to the database'});
-        }
+        await user.save();
+        console.log('user created is : ' , user);
         res.status(201).send({user , message : 'User created successfully'});
     } catch (error) {
         res.status(400).send(error);
@@ -29,26 +26,54 @@ router.post('/register', async (req, res) => {
 }
 );
 
-router.post('/login', async (req, res) => {
-    const { email , password } = req.body;
-    try {
-        const user = await User.findOne({email});
-        if(!user) {
-            return res.status(404).send({error : 'User not found'});
-        }
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch) {
-            return res.status(400).send({error : 'Invalid login credentials'});
-        }
-        const token = jwt.sign({id : user._id.toString()}, process.env.JWT_SECRET, {expiresIn : '1h'});
-        res.send({ user , token , message : 'User logged in successfully'});
-    } catch (error) {
-        res.status(400).send(error);
-    }
-} 
-);
+     
 
+    
 
+// router.post('/login', async (req, res) => {
+//     try { 
+//     const { name } = req.body;
+//     const { email } = req.body;
+//     const existingUser = await User.findOne({ name : name });
+//     const existingEmail = await User.findOne({ email : email });
+//     if (existingUser) {
+//         return res.send({ message: 'User already exists' });
+//     }
+//     if (existingEmail) {
+//         return res.send({ message: 'Email already exists' });
+//     }
+
+//     const newUser = new User({
+//         username : req.body.username,
+//         email : req.body.email,
+//         password : req.body.password
+//     });
+//     await newUser.save();
+//     res.send({ message: 'User created  successfully' });
+// } catch (error) {
+//         res.status(400).send(error);
+//     } 
+
+// });
+
+// to do later 
+// router.get('/login', async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
+//         const existingUser = await User.findOne({ email });
+//         if (!existingUser) {
+//             return res.send({ message: 'User does not exist' });
+//         }
+//         bcrypt.compare(password, existingUser.password, (err, result) => {
+//             if(result) {
+//                 const authClaims 
+//                 const token = jwt.sign({ email: existingUser.email }, '
+
+//     } catch (error) {
+//         res.send(error);    
+//     }
+// }
+// );
 
 
 module.exports = router;

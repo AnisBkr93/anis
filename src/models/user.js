@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },
@@ -15,6 +15,13 @@ const userSchema = new mongoose.Schema({
     },
     
 });
+
+tasks : [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task'
+    }
+]
 
 userSchema.pre('save', async function(next) {
     const user = this;
